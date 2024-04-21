@@ -128,3 +128,50 @@ print(temperatures.iloc[:,2:4])
 print(temperatures.iloc[0:5,2:4])
 
 ```
+
+### Pivot temperature by city and year (Add year column)
+
+```
+# Add a year column to temperatures
+temperatures['year'] = temperatures['date'].dt.year
+
+# Pivot avg_temp_c by country and city vs year
+temp_by_country_city_vs_year = temperatures.pivot_table('avg_temp_c', columns=['year'], index=['country', 'city'])
+
+# See the result
+print(temp_by_country_city_vs_year)
+
+```
+
+### Subsetting pivot tables
+
+```
+
+# Subset for Egypt to India
+temp_by_country_city_vs_year.loc["Egypt":"India"]
+
+# Subset for Egypt, Cairo to India, Delhi
+temp_by_country_city_vs_year.loc[("Egypt","Cairo"):("India","Delhi")]
+
+# Subset for Egypt, Cairo to India, Delhi, and 2005 to 2010
+temp_by_country_city_vs_year.loc[("Egypt","Cairo"):("India","Delhi"),"2005":"2010"]
+
+```
+
+### Calculating on a pivot table
+
+```
+# Get the worldwide mean temp by year
+mean_temp_by_year = temp_by_country_city_vs_year.mean(axis="index")
+
+# Filter for the year that had the highest mean temp
+print(mean_temp_by_year[mean_temp_by_year == max(mean_temp_by_year)])
+
+# Get the mean temp by city
+mean_temp_by_city = temp_by_country_city_vs_year.mean(axis="columns")
+
+# Filter for the city that had the lowest mean temp
+print(mean_temp_by_city[mean_temp_by_city == min(mean_temp_by_city)])
+
+```
+
